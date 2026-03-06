@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Python ITS Certification Reviewer</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+<h1>Python ITS Certification Reviewer</h1>
+<p class="subtitle">Practice Exam Simulator</p>
+</header>
+
+<div class="mainContainer">
+
+<!-- QUESTION NAVIGATION GRID -->
+
+<div class="navContainer">
+<h3>Question Navigator</h3>
+<div id="questionNav" class="navGrid"></div>
+</div>
+
+<!-- QUESTION AREA -->
+
+<div class="container">
+
+<div id="progress"></div>
+
+<div id="question" class="questionText"></div>
+
+<pre id="codeBlock"></pre>
+
+<div id="choices"></div>
+
+<div id="feedback"></div>
+
+<div class="buttons">
+
+<button onclick="prevQuestion()">Previous</button>
+
+<button onclick="nextQuestion()">Next</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="questions.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
