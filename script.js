@@ -1,162 +1,306 @@
-let currentQuestion = 0;
-let userAnswers = {};
+let originalQuestions = [...questions]
+let currentQuestion = 0
+let userAnswers = []
 
-function loadQuestion() {
+function loadQuestion(){
 
-    let q = questions[currentQuestion];
-    let container = document.getElementById("questionContainer");
+let q = questions[currentQuestion]
 
-    let html = `
-        <h2>Question ${currentQuestion + 1} of ${questions.length}</h2>
-        <p>${q.question}</p>
-    `;
+document.getElementById("questionNumber").innerHTML =
+"Question " + (currentQuestion+1) + " of " + questions.length
 
-    if (q.image) {
-        html += `<img src="${q.image}" style="max-width:100%;margin:15px 0;">`;
-    }
+document.getElementById("questionText").innerHTML = q.question || ""
+document.getElementById("codeBlock").innerText = q.code || ""
 
-    if (q.code) {
-        html += `<div class="codeBlock">${q.code}</div>`;
-    }
-
-    // MCQ QUESTIONS
-    if (q.type === "mcq") {
-
-        q.choices.forEach((choice, i) => {
-
-            html += `
-            <label class="choice">
-                <input type="radio" name="answer" value="${i}">
-                ${choice}
-            </label>
-            `;
-
-        });
-    }
-
-    // DROPDOWN QUESTIONS
-    if (q.type === "dropdown") {
-
-        q.subquestions.forEach((sq, i) => {
-
-            html += `
-            <div style="margin-top:20px;">
-                <p>${sq.text}</p>
-
-                <select id="dropdown${i}">
-                    <option value="">Select answer</option>
-                    ${sq.choices.map(c => `<option value="${c}">${c}</option>`).join("")}
-                </select>
-            </div>
-            `;
-
-        });
-    }
-
-    container.innerHTML = html;
-
-    updateProgress();
+if(q.image){
+document.getElementById("questionImage").innerHTML =
+`<img src="${q.image}" class="question-img">`
+}else{
+document.getElementById("questionImage").innerHTML=""
 }
 
-function updateProgress() {
+let html = ""
 
-    let percent = ((currentQuestion + 1) / questions.length) * 100;
-    document.getElementById("progressBar").style.width = percent + "%";
+if(q.type === "multi-dropdown"){
+
+q.subquestions.forEach((sub,i)=>{
+
+html += `<p>${sub.text}</p>`
+
+html += `<select onchange="saveDropdown(${i},this.value)">`
+html += `<option value="">Select answer</option>`
+
+sub.choices.forEach(choice=>{
+html += `<option value="${choice}">${choice}</option>`
+})
+
+html += `</select><br><br>`
+
+})
 
 }
 
-function nextQuestion() {
+if(q.type === "mcq"){
 
-    if (currentQuestion < questions.length - 1) {
-        currentQuestion++;
-        loadQuestion();
-    }
+q.choices.forEach((choice,i)=>{
 
-}
+html += `
+<label>
+<input type="radio" name="answer" onchange="saveAnswer(${i})">
+${choice}
+</label><br>
+`
 
-function previousQuestion() {
-
-    if (currentQuestion > 0) {
-        currentQuestion--;
-        loadQuestion();
-    }
+})
 
 }
 
-function checkAnswer() {
+if(q.type === "multi-select"){
 
-    let q = questions[currentQuestion];
+q.choices.forEach((choice,i)=>{
 
-    // MCQ
-    if (q.type === "mcq") {
+html += `
+<label>
+<input type="checkbox" onchange="saveMulti(${i},this)">
+${choice}
+</label><br>
+`
 
-        let selected = document.querySelector("input[name='answer']:checked");
+})
 
-        if (!selected) return;
-
-        let correct = q.answer;
-
-        document.querySelectorAll(".choice").forEach((c, i) => {
-
-            if (i === correct) {
-                c.classList.add("correct");
-            }
-
-            else if (i === parseInt(selected.value)) {
-                c.classList.add("wrong");
-            }
-
-        });
-    }
-
-    // DROPDOWN
-    if (q.type === "dropdown") {
-
-        q.subquestions.forEach((sq, i) => {
-
-            let select = document.getElementById(`dropdown${i}`);
-
-            if (select.value === sq.answer) {
-                select.style.border = "2px solid green";
-            }
-
-            else {
-                select.style.border = "2px solid red";
-            }
-
-        });
-
-    }
 }
 
-function resetQuestion() {
-    loadQuestion();
+if(q.type === "truefalse-group"){
+
+q.subquestions.forEach((sub,i)=>{
+
+html += `<p>${sub.text}</p>`
+
+html += `
+<label><input type="radio" name="tf${i}" value="True" onchange="saveTF(${i},'True')"> True</label>
+<label><input type="radio" name="tf${i}" value="False" onchange="saveTF(${i},'False')"> False</label>
+<br><br>
+`
+
+})
+
 }
 
-function toggleDarkMode() {
-    document.body.classList.toggle("dark");
+if(q.type === "docstring"){
+
+q.answers.forEach((ans,i)=>{
+
+html += `
+<p>Answer ${i+1}</p>
+<input type="text" onchange="saveDoc(${i},this.value)">
+<br><br>
+`
+
+})
+
 }
 
-let originalQuestions = [];
+if(q.type === "matching"){
 
-function shuffleQuestions() {
+q.pairs.forEach((pair,i)=>{
 
-    originalQuestions = [...questions];
+html += `<p>${pair.left}</p>`
 
-    questions.sort(() => Math.random() - 0.5);
+html += `<select onchange="saveMatch(${i},this.value)">`
 
-    currentQuestion = 0;
+html += `<option value="">Select answer</option>`
 
-    loadQuestion();
+q.pairs.forEach(p=>{
+html += `<option value="${p.right}">${p.right}</option>`
+})
+
+html += `</select><br><br>`
+
+})
+
 }
 
-function restoreOrder() {
-
-    questions = [...originalQuestions];
-
-    currentQuestion = 0;
-
-    loadQuestion();
+if(q.type === "code-display"){
+html += `<p><i>No answer required. Review the code above.</i></p>`
 }
 
-loadQuestion();
+document.getElementById("answers").innerHTML = html
+
+updateProgress()
+
+}
+
+function saveAnswer(ans){ userAnswers[currentQuestion] = ans }
+
+function saveDropdown(i,v){
+if(!userAnswers[currentQuestion]) userAnswers[currentQuestion]={}
+userAnswers[currentQuestion][i]=v
+}
+
+function saveMulti(i,box){
+if(!userAnswers[currentQuestion]) userAnswers[currentQuestion]=[]
+if(box.checked) userAnswers[currentQuestion].push(i)
+else userAnswers[currentQuestion]=userAnswers[currentQuestion].filter(v=>v!=i)
+}
+
+function saveTF(i,v){
+if(!userAnswers[currentQuestion]) userAnswers[currentQuestion]={}
+userAnswers[currentQuestion][i]=v
+}
+
+function saveDoc(i,v){
+if(!userAnswers[currentQuestion]) userAnswers[currentQuestion]={}
+userAnswers[currentQuestion][i]=v
+}
+
+function saveMatch(i,v){
+if(!userAnswers[currentQuestion]) userAnswers[currentQuestion]={}
+userAnswers[currentQuestion][i]=v
+}
+
+function checkAnswer(){
+
+let q = questions[currentQuestion]
+let container = document.getElementById("answers")
+
+container.querySelectorAll(".correct,.wrong")
+.forEach(el=>el.classList.remove("correct","wrong"))
+
+if(q.type==="multi-dropdown"){
+
+let selects=container.querySelectorAll("select")
+
+selects.forEach((sel,i)=>{
+if(sel.value===q.subquestions[i].answer)
+sel.classList.add("correct")
+else
+sel.classList.add("wrong")
+})
+
+}
+
+if(q.type==="mcq"){
+
+let radios=container.querySelectorAll("input[type=radio]")
+
+radios.forEach((r,i)=>{
+
+let label=r.parentElement
+
+if(i===q.answer) label.classList.add("correct")
+
+if(r.checked && i!==q.answer)
+label.classList.add("wrong")
+
+})
+
+}
+
+if(q.type==="multi-select"){
+
+let checks=container.querySelectorAll("input[type=checkbox]")
+
+checks.forEach((c,i)=>{
+
+let label=c.parentElement
+
+if(q.answers.includes(i)) label.classList.add("correct")
+
+if(c.checked && !q.answers.includes(i))
+label.classList.add("wrong")
+
+})
+
+}
+
+if(q.type==="truefalse-group"){
+
+q.subquestions.forEach((sub,i)=>{
+
+let radios=container.querySelectorAll(`input[name="tf${i}"]`)
+
+radios.forEach(r=>{
+
+let label=r.parentElement
+
+if(r.value===sub.answer) label.classList.add("correct")
+
+if(r.checked && r.value!==sub.answer)
+label.classList.add("wrong")
+
+})
+
+})
+
+}
+
+}
+
+function resetQuestion(){
+
+let container=document.getElementById("answers")
+
+container.querySelectorAll(".correct,.wrong")
+.forEach(el=>el.classList.remove("correct","wrong"))
+
+container.querySelectorAll("select").forEach(sel=>sel.selectedIndex=0)
+
+container.querySelectorAll("input[type=radio]")
+.forEach(r=>r.checked=false)
+
+container.querySelectorAll("input[type=checkbox]")
+.forEach(c=>c.checked=false)
+
+userAnswers[currentQuestion]=null
+
+}
+
+document.getElementById("nextBtn").onclick=()=>{
+if(currentQuestion<questions.length-1){
+currentQuestion++
+loadQuestion()
+}
+}
+
+document.getElementById("prevBtn").onclick=()=>{
+if(currentQuestion>0){
+currentQuestion--
+loadQuestion()
+}
+}
+
+function updateProgress(){
+
+let percent=((currentQuestion+1)/questions.length)*100
+document.getElementById("progressFill").style.width=percent+"%"
+
+}
+
+function shuffleQuestions(){
+
+questions.sort(()=>Math.random()-0.5)
+currentQuestion=0
+loadQuestion()
+
+}
+
+function resetOrder(){
+
+questions=[...originalQuestions]
+currentQuestion=0
+loadQuestion()
+
+}
+
+const darkBtn=document.getElementById("darkToggle")
+
+darkBtn.onclick=()=>{
+document.body.classList.toggle("dark-mode")
+
+darkBtn.textContent=
+document.body.classList.contains("dark-mode")
+? "Light Mode"
+: "Dark Mode"
+}
+
+loadQuestion()
