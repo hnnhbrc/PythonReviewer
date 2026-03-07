@@ -11,22 +11,27 @@ let html = `
 <p>${q.question}</p>
 `
 
+/* IMAGE */
+
 if(q.image){
 html += `<img src="${q.image}" style="max-width:100%;margin:15px 0">`
 }
+
+/* CODE */
 
 if(q.code){
 html += `<div class="codeBlock">${q.code}</div>`
 }
 
-/* MULTI DROPDOWN */
+/* MULTI DROPDOWN + TRUE/FALSE GROUP */
 
-if(q.type === "multi-dropdown" || q.type === "truefalse-group"){
+if(q.subquestions){
 
 q.subquestions.forEach((sq,i)=>{
 
 html += `
 <div style="margin-top:20px">
+
 <p>${sq.text}</p>
 
 <select id="dropdown${i}">
@@ -43,7 +48,7 @@ ${sq.choices.map(c=>`<option value="${c}">${c}</option>`).join("")}
 
 /* MCQ */
 
-else if(q.type === "mcq"){
+if(q.choices && q.type === "mcq"){
 
 q.choices.forEach((choice,i)=>{
 
@@ -60,7 +65,7 @@ ${choice}
 
 /* MULTI SELECT */
 
-else if(q.type === "multi-select"){
+if(q.choices && q.type === "multi-select"){
 
 q.choices.forEach((choice,i)=>{
 
@@ -77,12 +82,12 @@ ${choice}
 
 /* MATCHING */
 
-else if(q.type === "matching"){
+if(q.type === "matching"){
 
 q.pairs.forEach((p,i)=>{
 
 html += `
-<div style="margin-top:15px">
+<div style="margin-top:20px">
 
 <p>${p.left}</p>
 
@@ -102,7 +107,7 @@ ${q.pairs.map(x=>`<option value="${x.right}">${x.right}</option>`).join("")}
 
 /* DOCSTRING */
 
-else if(q.type === "docstring"){
+if(q.type === "docstring"){
 
 q.answers.forEach((a,i)=>{
 
@@ -126,12 +131,16 @@ updateProgress()
 
 }
 
+/* PROGRESS BAR */
+
 function updateProgress(){
 
 let percent = ((currentQuestion+1)/questions.length)*100
 document.getElementById("progressBar").style.width = percent + "%"
 
 }
+
+/* NAVIGATION */
 
 function nextQuestion(){
 
@@ -159,16 +168,20 @@ let q = questions[currentQuestion]
 
 /* DROPDOWN */
 
-if(q.type === "multi-dropdown" || q.type === "truefalse-group"){
+if(q.subquestions){
 
 q.subquestions.forEach((sq,i)=>{
 
 let select=document.getElementById(`dropdown${i}`)
 
-if(select.value===sq.answer){
+if(select){
+
+if(select.value === sq.answer){
 select.style.border="2px solid green"
 }else{
 select.style.border="2px solid red"
+}
+
 }
 
 })
@@ -219,55 +232,26 @@ c.classList.add("wrong")
 
 }
 
-/* MATCHING */
-
-if(q.type==="matching"){
-
-q.pairs.forEach((p,i)=>{
-
-let select=document.getElementById(`match${i}`)
-
-if(select.value===p.right){
-select.style.border="2px solid green"
-}else{
-select.style.border="2px solid red"
 }
 
-})
-
-}
-
-/* DOCSTRING */
-
-if(q.type==="docstring"){
-
-q.answers.forEach((a,i)=>{
-
-let input=document.getElementById(`doc${i}`)
-
-if(input.value.trim()===a){
-input.style.border="2px solid green"
-}else{
-input.style.border="2px solid red"
-}
-
-})
-
-}
-
-}
+/* TRY AGAIN */
 
 function resetQuestion(){
 loadQuestion()
 }
 
+/* DARK MODE */
+
 function toggleDarkMode(){
 document.body.classList.toggle("dark")
 }
 
+/* SHUFFLE */
+
 function shuffleQuestions(){
 
 originalQuestions=[...questions]
+
 questions.sort(()=>Math.random()-0.5)
 
 currentQuestion=0
@@ -275,13 +259,17 @@ loadQuestion()
 
 }
 
+/* RESTORE */
+
 function restoreOrder(){
 
 questions=[...originalQuestions]
-currentQuestion=0
 
+currentQuestion=0
 loadQuestion()
 
 }
+
+/* START */
 
 loadQuestion()
