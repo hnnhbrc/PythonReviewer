@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Python ITS Certification Reviewer</title>
 
 <link rel="stylesheet" href="style.css">
@@ -12,40 +15,46 @@
 <body>
 
 <header>
+
 <h1>Python ITS Certification Reviewer</h1>
 <p class="subtitle">Practice Exam Simulator</p>
 
-<div class="controls">
-<button onclick="toggleDarkMode()">Dark Mode</button>
+<div class="headerButtons">
+<button id="darkToggle">Dark Mode</button>
 <button onclick="shuffleQuestions()">Shuffle Questions</button>
-<button onclick="restoreOrder()">Original Order</button>
+<button onclick="resetOrder()">Original Order</button>
 </div>
 
 </header>
 
-<main>
+<div class="container">
 
-<div class="card">
-
-<div class="progress-container">
-<div id="progressBar"></div>
+<div class="progressBar">
+<div id="progressFill"></div>
 </div>
 
-<div id="questionContainer"></div>
+<h3 id="questionNumber"></h3>
+
+<p id="questionText"></p>
+
+<div id="questionImage"></div>
+
+<pre id="codeBlock"></pre>
+
+<div id="answers"></div>
 
 <div class="navButtons">
-<button onclick="previousQuestion()">Previous</button>
+<button id="prevBtn">Previous</button>
 <button onclick="checkAnswer()">Check Answer</button>
 <button onclick="resetQuestion()">Try Again</button>
-<button onclick="nextQuestion()">Next</button>
+<button id="nextBtn">Next</button>
 </div>
 
 </div>
-
-</main>
 
 <script src="questions.js"></script>
 <script src="script.js"></script>
 
 </body>
+
 </html>
