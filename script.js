@@ -4,12 +4,17 @@ let originalQuestions = []
 function loadQuestion(){
 
 let q = questions[currentQuestion]
+
 let container = document.getElementById("questionContainer")
 
 let html = `
 <h2>Question ${currentQuestion+1} of ${questions.length}</h2>
 <p>${q.question}</p>
 `
+
+if(q.note){
+html += `<div class="note">${q.note}</div>`
+}
 
 if(q.image){
 html += `<img src="${q.image}" style="max-width:100%;margin:15px 0">`
@@ -36,7 +41,7 @@ ${sq.choices.map(c=>`<option value="${c}">${c}</option>`).join("")}
 
 }
 
-if(q.type === "mcq"){
+if(q.type==="mcq"){
 
 q.choices.forEach((choice,i)=>{
 
@@ -51,7 +56,7 @@ ${choice}
 
 }
 
-if(q.type === "multi-select"){
+if(q.type==="multi-select"){
 
 q.choices.forEach((choice,i)=>{
 
@@ -74,14 +79,15 @@ updateProgress()
 
 function updateProgress(){
 
-let percent = ((currentQuestion+1)/questions.length)*100
-document.getElementById("progressBar").style.width = percent + "%"
+let percent=((currentQuestion+1)/questions.length)*100
+
+document.getElementById("progressBar").style.width=percent+"%"
 
 }
 
 function nextQuestion(){
 
-if(currentQuestion < questions.length-1){
+if(currentQuestion<questions.length-1){
 currentQuestion++
 loadQuestion()
 }
@@ -90,7 +96,7 @@ loadQuestion()
 
 function previousQuestion(){
 
-if(currentQuestion > 0){
+if(currentQuestion>0){
 currentQuestion--
 loadQuestion()
 }
@@ -99,7 +105,7 @@ loadQuestion()
 
 function checkAnswer(){
 
-let q = questions[currentQuestion]
+let q=questions[currentQuestion]
 
 if(q.subquestions){
 
@@ -107,7 +113,7 @@ q.subquestions.forEach((sq,i)=>{
 
 let select=document.getElementById(`dropdown${i}`)
 
-if(select.value === sq.answer){
+if(select.value===sq.answer){
 select.style.border="2px solid green"
 }else{
 select.style.border="2px solid red"
@@ -138,6 +144,24 @@ c.classList.add("wrong")
 
 }
 
+if(q.type==="multi-select"){
+
+let selected=[...document.querySelectorAll("input[name='answer']:checked")].map(x=>parseInt(x.value))
+
+document.querySelectorAll(".choice").forEach((c,i)=>{
+
+if(q.answers.includes(i)){
+c.classList.add("correct")
+}
+
+if(selected.includes(i) && !q.answers.includes(i)){
+c.classList.add("wrong")
+}
+
+})
+
+}
+
 }
 
 function resetQuestion(){
@@ -151,9 +175,11 @@ document.body.classList.toggle("dark")
 function shuffleQuestions(){
 
 originalQuestions=[...questions]
+
 questions.sort(()=>Math.random()-0.5)
 
 currentQuestion=0
+
 loadQuestion()
 
 }
@@ -161,7 +187,9 @@ loadQuestion()
 function restoreOrder(){
 
 questions=[...originalQuestions]
+
 currentQuestion=0
+
 loadQuestion()
 
 }
