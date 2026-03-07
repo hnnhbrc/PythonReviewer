@@ -1,223 +1,251 @@
+let originalQuestions = [...questions]
 let currentQuestion = 0
-let userAnswers = {}
+let userAnswers = []
 
-const questionEl = document.getElementById("question")
-const codeEl = document.getElementById("codeBlock")
-const choicesEl = document.getElementById("choices")
-const feedbackEl = document.getElementById("feedback")
-const progressEl = document.getElementById("progress")
-const navGrid = document.getElementById("questionNav")
+function loadQuestion(){
 
-function loadQuestion() {
+let q = questions[currentQuestion]
 
-const q = questions[currentQuestion]
+document.getElementById("questionNumber").innerHTML =
+"Question " + (currentQuestion+1) + " of " + questions.length
 
-questionEl.innerText = `Question ${q.id}: ${q.question}`
+document.getElementById("questionText").innerHTML = q.question || ""
 
-progressEl.innerText = `Question ${currentQuestion+1} of ${questions.length}`
+document.getElementById("codeBlock").innerText = q.code || ""
 
-codeEl.innerText = q.code ? q.code : ""
 
-choicesEl.innerHTML = ""
-feedbackEl.innerHTML = ""
+
+/* IMAGE */
+
+if(q.image){
+
+document.getElementById("questionImage").innerHTML =
+`<img src="${q.image}" class="question-img">`
+
+}else{
+
+document.getElementById("questionImage").innerHTML=""
+}
+
+
+
+let html = ""
+
+
+
+/* MULTI DROPDOWN */
+
+if(q.type === "multi-dropdown"){
+
+q.subquestions.forEach((sub,i)=>{
+
+html += `<p>${sub.text}</p>`
+
+html += `<select onchange="saveDropdown(${i},this.value)">`
+
+html += `<option value="">Select answer</option>`
+
+sub.choices.forEach(choice=>{
+
+html += `<option value="${choice}">${choice}</option>`
+
+})
+
+html += `</select><br><br>`
+
+})
+
+}
+
+
+
+/* MULTIPLE CHOICE */
 
 if(q.type === "mcq"){
 
 q.choices.forEach((choice,i)=>{
 
-const btn = document.createElement("button")
-btn.className="choiceBtn"
-btn.innerText = choice
-
-btn.onclick = ()=>{
-userAnswers[q.id]=i
-checkAnswer()
-}
-
-choicesEl.appendChild(btn)
+html += `
+<label>
+<input type="radio" name="answer" onchange="saveAnswer(${i})">
+${choice}
+</label><br>
+`
 
 })
 
 }
 
-else if(q.type === "multi-select"){
+
+
+/* MULTI SELECT */
+
+if(q.type === "multi-select"){
 
 q.choices.forEach((choice,i)=>{
 
-const label = document.createElement("label")
-const box = document.createElement("input")
-
-box.type="checkbox"
-
-box.onchange=()=>{
-if(!userAnswers[q.id]) userAnswers[q.id]=[]
-if(box.checked) userAnswers[q.id].push(i)
-else userAnswers[q.id]=userAnswers[q.id].filter(x=>x!==i)
-}
-
-label.appendChild(box)
-label.append(choice)
-
-choicesEl.appendChild(label)
+html += `
+<label>
+<input type="checkbox" onchange="saveMulti(${i},this)">
+${choice}
+</label><br>
+`
 
 })
 
 }
 
-else if(q.type==="truefalse-group" || q.type==="multi-dropdown"){
 
-q.subquestions.forEach((sq,index)=>{
 
-const div=document.createElement("div")
-div.className="subq"
+/* TRUE FALSE */
 
-const label=document.createElement("p")
-label.innerText=sq.text
+if(q.type === "truefalse-group"){
 
-const select=document.createElement("select")
+q.subquestions.forEach((sub,i)=>{
 
-sq.choices.forEach(c=>{
-const opt=document.createElement("option")
-opt.value=c
-opt.innerText=c
-select.appendChild(opt)
-})
+html += `<p>${sub.text}</p>`
 
-select.onchange=(e)=>{
-if(!userAnswers[q.id]) userAnswers[q.id]={}
-userAnswers[q.id][index]=e.target.value
-checkAnswer()
-}
-
-div.appendChild(label)
-div.appendChild(select)
-
-choicesEl.appendChild(div)
+html += `
+<label><input type="radio" name="tf${i}" onchange="saveTF(${i},'True')"> True</label>
+<label><input type="radio" name="tf${i}" onchange="saveTF(${i},'False')"> False</label>
+<br><br>
+`
 
 })
 
 }
 
-updateNav()
+
+
+document.getElementById("answers").innerHTML = html
+
+updateProgress()
 
 }
 
-function checkAnswer(){
 
-const q = questions[currentQuestion]
 
-if(q.type==="mcq"){
-
-if(userAnswers[q.id]===q.answer){
-feedbackEl.innerHTML="<span class='correct'>Correct</span>"
-}else{
-feedbackEl.innerHTML="<span class='wrong'>Incorrect</span>"
+function saveAnswer(ans){
+userAnswers[currentQuestion] = ans
 }
 
-}
+function saveDropdown(index,value){
 
-else if(q.type==="multi-select"){
+if(!userAnswers[currentQuestion])
+userAnswers[currentQuestion] = {}
 
-let selected=userAnswers[q.id]||[]
-
-let correct=q.answers
-
-let same = selected.length===correct.length && selected.every(v=>correct.includes(v))
-
-feedbackEl.innerHTML = same ?
-"<span class='correct'>Correct</span>" :
-"<span class='wrong'>Incorrect</span>"
+userAnswers[currentQuestion][index] = value
 
 }
 
-else if(q.type==="truefalse-group" || q.type==="multi-dropdown"){
+function saveMulti(index,box){
 
-let answers=userAnswers[q.id]
+if(!userAnswers[currentQuestion])
+userAnswers[currentQuestion] = []
 
-if(!answers) return
-
-let correct=true
-
-q.subquestions.forEach((sq,i)=>{
-if(answers[i]!==sq.answer) correct=false
-})
-
-feedbackEl.innerHTML = correct ?
-"<span class='correct'>Correct</span>" :
-"<span class='wrong'>Incorrect</span>"
+if(box.checked)
+userAnswers[currentQuestion].push(index)
+else
+userAnswers[currentQuestion] =
+userAnswers[currentQuestion].filter(v=>v!=index)
 
 }
 
-updateNav()
+function saveTF(index,value){
+
+if(!userAnswers[currentQuestion])
+userAnswers[currentQuestion] = {}
+
+userAnswers[currentQuestion][index] = value
 
 }
 
-function nextQuestion(){
+
+
+/* NAVIGATION */
+
+document.getElementById("nextBtn").onclick = () => {
 
 if(currentQuestion < questions.length-1){
+
 currentQuestion++
 loadQuestion()
-}
 
 }
 
-function prevQuestion(){
+}
+
+document.getElementById("prevBtn").onclick = () => {
 
 if(currentQuestion > 0){
+
 currentQuestion--
 loadQuestion()
-}
 
 }
 
-function jumpQuestion(i){
+}
 
-currentQuestion=i
+
+
+/* PROGRESS BAR */
+
+function updateProgress(){
+
+let percent = ((currentQuestion+1)/questions.length)*100
+
+document.getElementById("progressFill").style.width = percent + "%"
+
+}
+
+
+
+/* OPTIONAL SHUFFLE */
+
+function shuffleQuestions(){
+
+questions.sort(()=>Math.random()-0.5)
+
+currentQuestion = 0
+
 loadQuestion()
 
 }
 
-function buildNav(){
 
-navGrid.innerHTML=""
 
-questions.forEach((q,i)=>{
+/* RESET ORDER */
 
-const btn=document.createElement("button")
+function resetOrder(){
 
-btn.innerText=i+1
+questions = [...originalQuestions]
 
-btn.onclick=()=>jumpQuestion(i)
+currentQuestion = 0
 
-navGrid.appendChild(btn)
+loadQuestion()
+
+}
+
+
+
+/* DARK MODE */
+
+const darkBtn = document.getElementById("darkToggle")
+
+darkBtn.addEventListener("click", function(){
+
+document.body.classList.toggle("dark-mode")
+
+if(document.body.classList.contains("dark-mode")){
+darkBtn.textContent = "Light Mode"
+}else{
+darkBtn.textContent = "Dark Mode"
+}
 
 })
 
-}
 
-function updateNav(){
 
-const buttons = navGrid.children
+/* START */
 
-for(let i=0;i<buttons.length;i++){
-
-const qid = questions[i].id
-
-if(userAnswers[qid]!==undefined){
-buttons[i].style.background="#6be675"
-}else{
-buttons[i].style.background=""
-}
-
-if(i===currentQuestion){
-buttons[i].style.border="3px solid #333"
-}else{
-buttons[i].style.border=""
-}
-
-}
-
-}
-
-buildNav()
 loadQuestion()

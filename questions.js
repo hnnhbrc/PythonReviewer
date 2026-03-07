@@ -4,6 +4,7 @@ const questions = [
 id:1,
 type:"multi-dropdown",
 question:"Evaluate the code and select the correct output for each print statement.",
+image:"screenshot/A (1).png",
 
 code:`numList = [1,2,3,4,5]
 alphaList = ["a","b","c","d","e"]
@@ -44,6 +45,7 @@ answer:"True"
 id:2,
 type:"multi-dropdown",
 question:"A video store needs a way to determine the amount to charge customers for DVD rentals.",
+image:"screenshot/A (2).png",
 
 code:`#DVD Rental Calculator
 ontime = input("Was the video returned before 8 PM? Y or N").lower()
@@ -89,6 +91,7 @@ answer:"=="
 id:3,
 type:"mcq",
 question:"Which code should you write at line 02?",
+image:"screenshot/A (3).png",
 
 code:`print("What is your name?")
 ??
@@ -108,6 +111,7 @@ answer:1
 id:4,
 type:"mcq",
 question:"Complete the formula where b equals a multiplied by negative one then raised to the power of two.",
+image:"screenshot/A (4).png",
 
 code:`a = eval(input("Enter a number for the equation: "))
 b = ?`,
@@ -126,6 +130,7 @@ answer:1
 id:5,
 type:"multi-select",
 question:"Choose TWO correct solutions that produce comma separated output with quotes around the string.",
+image:"screenshot/A (5).png",
 
 code:`item = input("Enter item name: ")
 sales = input("Enter quantity: ")`,
@@ -144,6 +149,7 @@ answers:[0,3]
 id:6,
 type:"truefalse-group",
 question:"For each statement select True or False.",
+image:"screenshot/A (6).png",
 
 subquestions:[
 {
@@ -168,6 +174,7 @@ answer:"True"
 id:7,
 type:"code-display",
 question:"Complete the function to compute roots based on conditions.",
+image:"screenshot/A (7).png",
 
 code:`def safe_root(a,b):
 
@@ -187,6 +194,7 @@ return answer`
 id:8,
 type:"code-display",
 question:"Complete the loop that stops when product ID 6 is found.",
+image:"screenshot/A (8).png",
 
 code:`productIdList = [0,1,2,3,4,5,6,7,8,9]
 
@@ -205,7 +213,7 @@ while index < 10:
 id:9,
 type:"code-display",
 question:"Complete the grade converter program.",
-
+image:"screenshot/A (9).png",
 code:`grade = int(input("Enter numeric grade"))
 
 if grade >= 90:
@@ -226,7 +234,7 @@ print("Your letter grade is", letter_grade)`
 id:10,
 type:"mcq",
 question:"Which code should you write for line 05 and line 06 to ignore blank lines while reading a file?",
-
+image:"screenshot/A (10).png",
 choices:["A","B","C","D"],
 answer:2
 },
@@ -236,7 +244,7 @@ answer:2
 id:11,
 type:"truefalse-group",
 question:"Evaluate the following program. Line numbers are included for reference only.",
-
+image:"screenshot/A (11).png",
 subquestions:[
 {
 text:"Line 02 will cause a runtime error.",
@@ -262,7 +270,7 @@ answer:"True"
 id:12,
 type:"code-display",
 question:"Complete the grading logic program.",
-
+image:"screenshot/A (12).png",
 code:`if grade <= 100:
     if grade >= 90:
         print("Your grade is A.")
@@ -282,7 +290,7 @@ else:
 id:13,
 type:"multi-select",
 question:"Which TWO math functions remove decimals and return the absolute value?",
-
+image:"screenshot/A (13).png",
 choices:[
 "math.floor(x)",
 "math.fmod(x)",
@@ -299,7 +307,7 @@ answers:[0,3]
 id:14,
 type:"mcq",
 question:"Which code opens a file for reading and writing, creating it if it does not exist and deleting existing content?",
-
+image:"screenshot/A (14).png",
 choices:[
 "open('local_data','r+')",
 "open('local_data','w')",
@@ -316,7 +324,7 @@ answer:3
 id:15,
 type:"docstring",
 question:"Python docstring questions.",
-
+image:"screenshot/A (15).png",
 answers:[
 '""" triple quotes """',
 "Immediately after the function header",
@@ -330,7 +338,7 @@ answers:[
 id:16,
 type:"code-display",
 question:"Complete the function to perform safe division.",
-
+image:"screenshot/A (16).png",
 code:`def safe_divide(numerator, denominator):
 
     if numerator is None or denominator is None:
@@ -349,7 +357,7 @@ code:`def safe_divide(numerator, denominator):
 id:17,
 type:"mcq",
 question:"What is the output of the following code?",
-
+image:"screenshot/A (17).png",
 code:`import datetime
 
 d = datetime.datetime(2017,4,7)
@@ -372,7 +380,7 @@ answer:3
 id:18,
 type:"multi-select",
 question:"Which two function calls are correct?",
-
+image:"screenshot/A (18).png",
 choices:[
 "roomAssignment(name, year = grade)",
 "roomAssignment(student, year)",
@@ -389,7 +397,7 @@ answers:[0,2]
 id:19,
 type:"code-display",
 question:"Complete the error handling structure.",
-
+image:"screenshot/A (19).png",
 code:`try:
     process()
 
@@ -406,7 +414,7 @@ finally:
 id:20,
 type:"multi-select",
 question:"Which two functions generate a random integer between 5 and 11?",
-
+image:"screenshot/A (20).png",
 choices:[
 "random.randint(5,11)",
 "random.randrange(5,11,1)",
@@ -423,7 +431,7 @@ answers:[0,3]
 id:21,
 type:"mcq",
 question:"Which documentation syntax is correct?",
-
+image:"screenshot/A (21).png",
 code:`def get_balance():
     # Returns the current balance of the bank account
     return balance`,
@@ -444,7 +452,7 @@ answer:3
 id:22,
 type:"multi-select",
 question:"Which two code segments truncate the decimal portion of a division result?",
-
+image:"screenshot/A (22).png",
 choices:[
 "average_balance = int(total_deposits / number_of_customers)",
 "average_balance = float(total_deposits // number_of_customers)",
@@ -461,7 +469,7 @@ answers:[0,3]
 id:23,
 type:"code-display",
 question:"Complete the multiplication table generator.",
-
+image:"screenshot/A (23).png",
 code:`def times_tables():
 
     for col in range(2,13):
@@ -478,7 +486,7 @@ times_tables()`
 id:24,
 type:"mcq",
 question:"What is the output value?",
-
+image:"screenshot/A (24).png",
 code:`list_1 = [1,2]
 list_2 = [3,4]
 
@@ -503,7 +511,7 @@ answer:2
 id:25,
 type:"multi-dropdown",
 question:"Evaluate the code.",
-
+image:"screenshot/A (25).png",
 code:`a = 'Config1'
 print(a)
 
@@ -533,7 +541,7 @@ answer:"Config1"
 id:26,
 type:"code-display",
 question:"Complete the formatted table output.",
-
+image:"screenshot/A (26).png",
 code:`print("{0:10}{1:5.1f}{2:7.2f}".format(fields[0], eval(fields[1]), eval(fields[2])))`
 },
 
@@ -543,7 +551,7 @@ code:`print("{0:10}{1:5.1f}{2:7.2f}".format(fields[0], eval(fields[1]), eval(fie
 id:27,
 type:"multi-dropdown",
 question:"Correct the errors in the code.",
-
+image:"screenshot/A (27).png",
 code:`numbers = [0,1,2,3,4,5,6,7,8,9]
 
 index = 0
@@ -577,7 +585,7 @@ answer:"if numbers[index] == 6:"
 id:28,
 type:"code-display",
 question:"Complete the loop that counts characters.",
-
+image:"screenshot/A (28).png",
 code:`x = "Hello World"
 
 while x != "QUIT":
@@ -597,7 +605,7 @@ while x != "QUIT":
 id:29,
 type:"code-display",
 question:"Arrange the code segments to complete the function.",
-
+image:"screenshot/A (29).png",
 code:`def get_first_line(filename, mode):
 
     if os.path.isfile(filename):
@@ -615,6 +623,7 @@ code:`def get_first_line(filename, mode):
 id:30,
 type:"multi-dropdown",
 question:"Complete the code to display specials.",
+image:"screenshot/A (30).png",
 
 subquestions:[
 {
@@ -650,6 +659,7 @@ answer:"daysLeft = 6 - now.weekday()"
 id:31,
 type:"truefalse-group",
 question:"For each statement about try statements select True or False.",
+image:"screenshot/A (31).png",
 
 subquestions:[
 {
@@ -681,7 +691,7 @@ answer:"False"
 id:32,
 type:"multi-dropdown",
 question:"Evaluate the program.",
-
+image:"screenshot/A (32).png",
 code:`rooms = {1:'Foyer',2:'Conference Room'}
 
 room = input("Enter the room number:")
@@ -720,7 +730,7 @@ answer:"Mismatched data type(s)"
 id:33,
 type:"multi-dropdown",
 question:"Complete the statements about assert methods.",
-
+image:"screenshot/A (33).png",
 subquestions:[
 {
 text:"To test that values of variables a and b are the same use",
@@ -746,7 +756,7 @@ answer:"assertIn(a,b)"
 id:34,
 type:"multi-dropdown",
 question:"Complete the program that prints the letter E using asterisks.",
-
+image:"screenshot/A (34).png",
 subquestions:[
 {
 text:"Value for row range",
@@ -767,7 +777,7 @@ answer:"5"
 id:35,
 type:"code-display",
 question:"Arrange the code segments to complete the search function.",
-
+image:"screenshot/A (35).png",
 code:`def search(items, term):
 
     for i in range(len(items)):
@@ -784,7 +794,7 @@ code:`def search(items, term):
 id:36,
 type:"truefalse-group",
 question:"For each statement about the program select True or False.",
-
+image:"screenshot/A (36).png",
 subquestions:[
 {
 text:"To meet the requirements you must change line 01 to include a default parameter.",
@@ -815,7 +825,7 @@ answer:"False"
 id:37,
 type:"code-display",
 question:"Complete the rating program.",
-
+image:"screenshot/A (37).png",
 code:`sum = count = done = 0
 average = 0.0
 
@@ -840,6 +850,7 @@ print("The average star rating for the new coffee is " + format(average,'.2f'))`
 id:38,
 type:"code-display",
 question:"Complete the guessing game loop.",
+image:"screenshot/A (38).png",
 
 code:`from random import randint
 
@@ -871,6 +882,7 @@ while chance <= 3:
 id:39,
 type:"multi-dropdown",
 question:"Fix the payroll calculation errors.",
+image:"screenshot/A (39).png",
 
 subquestions:[
 {
@@ -900,6 +912,7 @@ answer:"sum / count"
 id:40,
 type:"mcq",
 question:"When running the code an error occurs on line 03. What causes the error?",
+image:"screenshot/A (40).png",
 
 code:`def read_file(file):
     line = None
@@ -924,6 +937,7 @@ answer:3
 id:41,
 type:"multi-select",
 question:"Which two code segments should you use for line 01 and line 04? (Choose 2)",
+image:"screenshot/A (41).png",
 
 choices:[
 "def get_name():",
@@ -943,6 +957,7 @@ answers:[0,4]
 id:42,
 type:"multi-select",
 question:"Which two code segments generate a random number that is a multiple of 5 between 5 and 100?",
+image:"screenshot/A (42).png",
 
 choices:[
 "from random import randint\nprint(randint(1,20) * 5)",
@@ -960,6 +975,7 @@ answers:[0,2]
 id:43,
 type:"multi-dropdown",
 question:"Complete the function that counts how many words contain a specific letter.",
+image:"screenshot/A (43).png",
 
 code:`def count_letter(letter, word_list):
     count = 0
@@ -998,6 +1014,7 @@ answer:"letter in word"
 id:44,
 type:"truefalse-group",
 question:"Review the following code and select True or False.",
+image:"screenshot/A (44).png",
 
 code:`f = open("python.txt","a")
 f.write("This is a line of text.")
@@ -1028,6 +1045,7 @@ answer:"True"
 id:45,
 type:"code-display",
 question:"Complete the program that prints all prime numbers from 2 to 100.",
+image:"screenshot/A (45).png",
 
 code:`p = 2
 
@@ -1051,6 +1069,7 @@ while p <= 100:
 id:46,
 type:"truefalse-group",
 question:"You are creating a Python program that compares numbers. You create the following code. Line numbers are included for reference only.",
+image:"screenshot/A (46).png",
 
 code:`num1 = eval(input("Please enter the first number: "))
 num2 = eval(input("Please enter the second number: "))
@@ -1097,6 +1116,7 @@ answer:"True"
 id:47,
 type:"truefalse-group",
 question:"You create the following Python function to calculate the power of a number. Line numbers are included for reference only.",
+image:"screenshot/A (47).png",
 
 code:`# The calc_power function calculates exponents
 # x is the base
@@ -1136,6 +1156,7 @@ answer:"True"
 id:48,
 type:"matching",
 question:"Match the slicing operations with their results.",
+image:"screenshot/A (48).png",
 
 code:`alph = "abcdefghijklmnopqrstuvwxyz"`,
 
@@ -1151,6 +1172,7 @@ pairs:[
 id:49,
 type:"multi-dropdown",
 question:"Complete the file manipulation program.",
+image:"screenshot/A (49).png",
 
 code:`import os
 file = open("myFile.txt", __ )
@@ -1177,6 +1199,7 @@ answer:"write"
 id:50,
 type:"mcq",
 question:"What value will print?",
+image:"screenshot/A (50).png",
 
 code:`grade = 76
 rank = 3
@@ -1206,6 +1229,7 @@ answer:0
 id:51,
 type:"mcq",
 question:"What is the output of the command?",
+image:"screenshot/A (51).png",
 
 code:`import sys
 print(sys.argv[2])
@@ -1229,6 +1253,7 @@ answer:2
 id:52,
 type:"multi-dropdown",
 question:"Complete the comparison statement.",
+image:"screenshot/A (52).png",
 
 code:`numList = [1,2,3,4,5]
 alphaList = ["a","b","c","d","e"]
@@ -1253,6 +1278,7 @@ answer:"=="
 id:53,
 type:"multi-dropdown",
 question:"Complete the program to properly handle input errors.",
+image:"screenshot/A (53).png",
 
 code:`while True:
     __:
@@ -1281,6 +1307,7 @@ answer:"except"
 id:54,
 type:"mcq",
 question:"How many lines of output does the code print?",
+image:"screenshot/A (54).png",
 
 code:`product = 2
 n = 5
@@ -1308,6 +1335,7 @@ answer:1
 id:55,
 type:"mcq",
 question:"What is the result of the code?",
+image:"screenshot/A (55).png",
 
 code:`value1 = 9
 value2 = 4
