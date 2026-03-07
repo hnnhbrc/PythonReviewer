@@ -169,25 +169,37 @@ answer:"True"
 }
 ]
 },
-
 {
 id:7,
-type:"code-display",
+type:"multi-dropdown",
 question:"Complete the function to compute roots based on conditions.",
 image:"screenshot/A (7).png",
 
 code:`def safe_root(a,b):
 
-if a >= 0:
+if a __ 0:
     answer = a ** (1/b)
 
 else:
-    if a % 2 == 0:
+    if a % 2 __ 0:
         answer = "Result is an imaginary number"
     else:
         answer = -(-a) ** (1/b)
 
-return answer`
+return answer`,
+
+subquestions:[
+{
+text:"Condition to check non-negative",
+choices:[">=","<=","=="],
+answer:">="
+},
+{
+text:"Check if number is even",
+choices:["==","!=","<"],
+answer:"=="
+}
+]
 },
 
 {
