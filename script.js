@@ -1,34 +1,38 @@
-let currentQuestion = 0
-let originalQuestions = []
+let currentQuestion=0
+let originalQuestions=[]
+
+/* LOAD QUESTION */
 
 function loadQuestion(){
 
-let q = questions[currentQuestion]
+let q=questions[currentQuestion]
 
-let container = document.getElementById("questionContainer")
+let container=document.getElementById("questionContainer")
 
-let html = `
+let html=`
 <h2>Question ${currentQuestion+1} of ${questions.length}</h2>
 <p>${q.question}</p>
 `
 
-if(q.note){
-html += `<div class="note">${q.note}</div>`
+if(q.description){
+html+=`<div class="description">${q.description}</div>`
 }
 
 if(q.image){
-html += `<img src="${q.image}" style="max-width:100%;margin:15px 0">`
+html+=`<img src="${q.image}" style="max-width:100%;margin:15px 0">`
 }
 
 if(q.code){
-html += `<div class="codeBlock">${q.code}</div>`
+html+=`<div class="codeBlock">${q.code}</div>`
 }
+
+/* SUBQUESTIONS (dropdown) */
 
 if(q.subquestions){
 
 q.subquestions.forEach((sq,i)=>{
 
-html += `
+html+=`
 <p>${sq.text}</p>
 
 <select id="dropdown${i}">
@@ -41,11 +45,13 @@ ${sq.choices.map(c=>`<option value="${c}">${c}</option>`).join("")}
 
 }
 
+/* MCQ */
+
 if(q.type==="mcq"){
 
 q.choices.forEach((choice,i)=>{
 
-html += `
+html+=`
 <label class="choice">
 <input type="radio" name="answer" value="${i}">
 ${choice}
@@ -56,11 +62,13 @@ ${choice}
 
 }
 
+/* MULTI SELECT */
+
 if(q.type==="multi-select"){
 
 q.choices.forEach((choice,i)=>{
 
-html += `
+html+=`
 <label class="choice">
 <input type="checkbox" name="answer" value="${i}">
 ${choice}
@@ -71,11 +79,51 @@ ${choice}
 
 }
 
-container.innerHTML = html
+container.innerHTML=html
 
 updateProgress()
+updateNavHighlight()
 
 }
+
+/* NAVIGATION GRID */
+
+function buildNavigation(){
+
+let nav=document.getElementById("questionNav")
+
+questions.forEach((q,i)=>{
+
+let btn=document.createElement("button")
+
+btn.innerText=i+1
+
+btn.onclick=()=>{
+
+currentQuestion=i
+loadQuestion()
+
+}
+
+nav.appendChild(btn)
+
+})
+
+}
+
+/* HIGHLIGHT CURRENT QUESTION */
+
+function updateNavHighlight(){
+
+let buttons=document.querySelectorAll("#questionNav button")
+
+buttons.forEach(b=>b.classList.remove("active"))
+
+buttons[currentQuestion].classList.add("active")
+
+}
+
+/* PROGRESS */
 
 function updateProgress(){
 
@@ -84,6 +132,8 @@ let percent=((currentQuestion+1)/questions.length)*100
 document.getElementById("progressBar").style.width=percent+"%"
 
 }
+
+/* NEXT / PREVIOUS */
 
 function nextQuestion(){
 
@@ -102,6 +152,8 @@ loadQuestion()
 }
 
 }
+
+/* CHECK ANSWERS */
 
 function checkAnswer(){
 
@@ -123,54 +175,21 @@ select.style.border="2px solid red"
 
 }
 
-if(q.type==="mcq"){
-
-let selected=document.querySelector("input[name='answer']:checked")
-
-if(!selected)return
-
-let correct=q.answer
-
-document.querySelectorAll(".choice").forEach((c,i)=>{
-
-if(i===correct){
-c.classList.add("correct")
-}
-else if(i===parseInt(selected.value)){
-c.classList.add("wrong")
 }
 
-})
-
-}
-
-if(q.type==="multi-select"){
-
-let selected=[...document.querySelectorAll("input[name='answer']:checked")].map(x=>parseInt(x.value))
-
-document.querySelectorAll(".choice").forEach((c,i)=>{
-
-if(q.answers.includes(i)){
-c.classList.add("correct")
-}
-
-if(selected.includes(i) && !q.answers.includes(i)){
-c.classList.add("wrong")
-}
-
-})
-
-}
-
-}
+/* RESET */
 
 function resetQuestion(){
 loadQuestion()
 }
 
+/* DARK MODE */
+
 function toggleDarkMode(){
 document.body.classList.toggle("dark")
 }
+
+/* SHUFFLE */
 
 function shuffleQuestions(){
 
@@ -184,6 +203,8 @@ loadQuestion()
 
 }
 
+/* RESTORE */
+
 function restoreOrder(){
 
 questions=[...originalQuestions]
@@ -194,4 +215,7 @@ loadQuestion()
 
 }
 
+/* START */
+
+buildNavigation()
 loadQuestion()
