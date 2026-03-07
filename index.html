@@ -20,16 +20,29 @@
 <p class="subtitle">Practice Exam Simulator</p>
 
 <div class="controls">
-
 <button onclick="toggleDarkMode()">Dark Mode</button>
 <button onclick="shuffleQuestions()">Shuffle Questions</button>
 <button onclick="restoreOrder()">Original Order</button>
-
 </div>
 
 </header>
 
 <main>
+
+<div class="layout">
+
+<!-- NAVIGATION PANEL -->
+
+<div class="navPanel">
+
+<h3>Questions</h3>
+
+<div id="questionNav"></div>
+
+</div>
+
+
+<!-- MAIN QUESTION AREA -->
 
 <div class="card">
 
@@ -45,6 +58,8 @@
 <button onclick="checkAnswer()">Check Answer</button>
 <button onclick="resetQuestion()">Try Again</button>
 <button onclick="nextQuestion()">Next</button>
+
+</div>
 
 </div>
 
