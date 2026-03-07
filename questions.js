@@ -247,7 +247,27 @@ id:10,
 type:"mcq",
 question:"Which code should you write for line 05 and line 06 to ignore blank lines while reading a file?",
 image:"screenshot/A (10).png",
-choices:["A","B","C","D"],
+
+choices:[
+
+`A.
+05 if line != "\\n":
+06     if line != ""`,
+
+`B.
+05 if line == "\\n":
+06     if line != None`,
+
+`C.
+05 if line != "":
+06     if line != "\\n"`,
+
+`D.
+05 if line != "":
+06     if line != ""`
+
+],
+
 answer:2
 },
 /* ===================== QUESTION 11 ===================== */
