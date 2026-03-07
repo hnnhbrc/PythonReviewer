@@ -1,0 +1,173 @@
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#D5CECE;
+margin:0;
+padding:0;
+}
+
+/* HEADER */
+
+header{
+background:#1B1D4D;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+.headerButtons{
+margin-top:10px;
+}
+
+.headerButtons button{
+margin:5px;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+max-width:900px;
+width:90%;
+margin:auto;
+background:white;
+padding:30px;
+margin-top:20px;
+margin-bottom:40px;
+border-radius:15px;
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+display:flex;
+flex-direction:column;
+min-height:500px;
+}
+
+/* PROGRESS BAR */
+
+.progressBar{
+height:8px;
+background:#ddd;
+border-radius:5px;
+margin-bottom:20px;
+}
+
+#progressFill{
+height:8px;
+background:#982A9A;
+width:0%;
+border-radius:5px;
+}
+
+/* CODE BLOCK */
+
+pre{
+background:#1B1D4D;
+color:white;
+padding:18px;
+border-radius:10px;
+overflow-x:auto;
+font-size:14px;
+}
+
+/* IMAGE */
+
+.question-img{
+max-width:100%;
+height:auto;
+border-radius:8px;
+margin-top:10px;
+}
+
+/* BUTTONS */
+
+button{
+padding:10px 18px;
+border:none;
+background:#982A9A;
+color:white;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+}
+
+button:hover{
+background:#7B1E7C;
+}
+
+/* NAV BUTTONS */
+
+.navButtons{
+margin-top:auto;
+display:flex;
+justify-content:space-between;
+padding-top:30px;
+flex-wrap:wrap;
+gap:10px;
+}
+
+/* DROPDOWN */
+
+select{
+padding:8px;
+border-radius:6px;
+border:1px solid #C97FB2;
+margin-top:5px;
+}
+
+/* ANSWER COLORS */
+
+.correct{
+background:#d4edda;
+border:2px solid #28a745;
+padding:4px;
+border-radius:5px;
+}
+
+.wrong{
+background:#f8d7da;
+border:2px solid #dc3545;
+padding:4px;
+border-radius:5px;
+}
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+.container{
+padding:20px;
+}
+
+button{
+width:100%;
+}
+
+.navButtons{
+flex-direction:column;
+}
+
+}
+
+/* DARK MODE */
+
+.dark-mode{
+background:#121212;
+color:#eeeeee;
+}
+
+.dark-mode header{
+background:#0d0f2f;
+}
+
+.dark-mode .container{
+background:#1e1e1e;
+color:white;
+}
+
+.dark-mode pre{
+background:#000;
+color:#00ff9c;
+}
+
+.dark-mode select{
+background:#2c2c2c;
+color:white;
+border:1px solid #555;
+}
