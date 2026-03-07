@@ -4,7 +4,7 @@ const questions = [
 id:1,
 type:"multi-dropdown",
 question:"Evaluate the code and select the correct output for each print statement.",
-image:"screenshot/A (1).png",
+image:"A (1).png",
 
 code:`numList = [1,2,3,4,5]
 alphaList = ["a","b","c","d","e"]
@@ -1351,5 +1351,6 @@ choices:[
 
 answer:3
 }
+
 
 ];
