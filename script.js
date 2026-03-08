@@ -1,5 +1,27 @@
-let currentQuestion=0
-let originalQuestions=[]
+let currentQuestion = 0
+
+/* BUILD NAVIGATION */
+
+function buildNavigation(){
+
+let nav=document.getElementById("questionNav")
+
+questions.forEach((q,i)=>{
+
+let btn=document.createElement("button")
+
+btn.innerText=i+1
+
+btn.onclick=()=>{
+currentQuestion=i
+loadQuestion()
+}
+
+nav.appendChild(btn)
+
+})
+
+}
 
 /* LOAD QUESTION */
 
@@ -14,10 +36,6 @@ let html=`
 <p>${q.question}</p>
 `
 
-if(q.description){
-html+=`<div class="description">${q.description}</div>`
-}
-
 if(q.image){
 html+=`<img src="${q.image}" style="max-width:100%;margin:15px 0">`
 }
@@ -26,7 +44,7 @@ if(q.code){
 html+=`<div class="codeBlock">${q.code}</div>`
 }
 
-/* SUBQUESTIONS (dropdown) */
+/* DROPDOWN QUESTIONS */
 
 if(q.subquestions){
 
@@ -82,45 +100,120 @@ ${choice}
 container.innerHTML=html
 
 updateProgress()
-updateNavHighlight()
+highlightCurrent()
 
 }
 
-/* NAVIGATION GRID */
+/* CHECK ANSWER */
 
-function buildNavigation(){
+function checkAnswer(){
 
-let nav=document.getElementById("questionNav")
+let q=questions[currentQuestion]
 
-questions.forEach((q,i)=>{
+let buttons=document.querySelectorAll("#questionNav button")
 
-let btn=document.createElement("button")
+let correct=true
 
-btn.innerText=i+1
+/* DROPDOWN */
 
-btn.onclick=()=>{
+if(q.subquestions){
 
-currentQuestion=i
-loadQuestion()
+q.subquestions.forEach((sq,i)=>{
+
+let select=document.getElementById(`dropdown${i}`)
+
+if(select.value===sq.answer){
+
+select.style.border="2px solid green"
+
+}else{
+
+select.style.border="2px solid red"
+correct=false
 
 }
-
-nav.appendChild(btn)
 
 })
 
 }
 
-/* HIGHLIGHT CURRENT QUESTION */
+/* MCQ */
 
-function updateNavHighlight(){
+if(q.type==="mcq"){
 
-let buttons=document.querySelectorAll("#questionNav button")
+let selected=document.querySelector("input[name='answer']:checked")
 
-buttons.forEach(b=>b.classList.remove("active"))
+if(!selected)return
 
-buttons[currentQuestion].classList.add("active")
+let answer=parseInt(selected.value)
 
+document.querySelectorAll(".choice").forEach((c,i)=>{
+
+if(i===q.answer){
+c.classList.add("correct")
+}
+else if(i===answer){
+c.classList.add("wrong")
+correct=false
+}
+
+})
+
+}
+
+/* MULTI SELECT */
+
+if(q.type==="multi-select"){
+
+let selected=[...document.querySelectorAll("input[name='answer']:checked")].map(x=>parseInt(x.value))
+
+document.querySelectorAll(".choice").forEach((c,i)=>{
+
+if(q.answers.includes(i)){
+c.classList.add("correct")
+}
+
+if(selected.includes(i)&&!q.answers.includes(i)){
+c.classList.add("wrong")
+correct=false
+}
+
+})
+
+}
+
+/* COLOR NAVIGATION */
+
+if(correct){
+buttons[currentQuestion].style.background="green"
+buttons[currentQuestion].style.color="white"
+}else{
+buttons[currentQuestion].style.background="red"
+buttons[currentQuestion].style.color="white"
+}
+
+}
+
+/* RESET */
+
+function resetQuestion(){
+loadQuestion()
+}
+
+/* NAVIGATION */
+
+function nextQuestion(){
+if(currentQuestion<questions.length-1){
+currentQuestion++
+loadQuestion()
+}
+}
+
+function previousQuestion(){
+if(currentQuestion>0){
+currentQuestion--
+loadQuestion()
+}
 }
 
 /* PROGRESS */
@@ -133,86 +226,22 @@ document.getElementById("progressBar").style.width=percent+"%"
 
 }
 
-/* NEXT / PREVIOUS */
+/* CURRENT HIGHLIGHT */
 
-function nextQuestion(){
+function highlightCurrent(){
 
-if(currentQuestion<questions.length-1){
-currentQuestion++
-loadQuestion()
-}
+let buttons=document.querySelectorAll("#questionNav button")
 
-}
+buttons.forEach(b=>b.classList.remove("active"))
 
-function previousQuestion(){
+buttons[currentQuestion].classList.add("active")
 
-if(currentQuestion>0){
-currentQuestion--
-loadQuestion()
-}
-
-}
-
-/* CHECK ANSWERS */
-
-function checkAnswer(){
-
-let q=questions[currentQuestion]
-
-if(q.subquestions){
-
-q.subquestions.forEach((sq,i)=>{
-
-let select=document.getElementById(`dropdown${i}`)
-
-if(select.value===sq.answer){
-select.style.border="2px solid green"
-}else{
-select.style.border="2px solid red"
-}
-
-})
-
-}
-
-}
-
-/* RESET */
-
-function resetQuestion(){
-loadQuestion()
 }
 
 /* DARK MODE */
 
 function toggleDarkMode(){
 document.body.classList.toggle("dark")
-}
-
-/* SHUFFLE */
-
-function shuffleQuestions(){
-
-originalQuestions=[...questions]
-
-questions.sort(()=>Math.random()-0.5)
-
-currentQuestion=0
-
-loadQuestion()
-
-}
-
-/* RESTORE */
-
-function restoreOrder(){
-
-questions=[...originalQuestions]
-
-currentQuestion=0
-
-loadQuestion()
-
 }
 
 /* START */
