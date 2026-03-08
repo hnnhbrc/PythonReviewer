@@ -4,16 +4,16 @@ let currentQuestion = 0
 
 function buildNavigation(){
 
-let nav=document.getElementById("questionNav")
+let nav = document.getElementById("questionNav")
 
 questions.forEach((q,i)=>{
 
-let btn=document.createElement("button")
+let btn = document.createElement("button")
 
-btn.innerText=i+1
+btn.innerText = i+1
 
-btn.onclick=()=>{
-currentQuestion=i
+btn.onclick = ()=>{
+currentQuestion = i
 loadQuestion()
 }
 
@@ -27,30 +27,34 @@ nav.appendChild(btn)
 
 function loadQuestion(){
 
-let q=questions[currentQuestion]
+let q = questions[currentQuestion]
 
-let container=document.getElementById("questionContainer")
+let container = document.getElementById("questionContainer")
 
-let html=`
+let html = `
 <h2>Question ${currentQuestion+1} of ${questions.length}</h2>
 <p>${q.question}</p>
 `
 
+if(q.description){
+html += `<div class="description">${q.description}</div>`
+}
+
 if(q.image){
-html+=`<img src="${q.image}" style="max-width:100%;margin:15px 0">`
+html += `<img src="${q.image}" style="max-width:100%;margin:15px 0">`
 }
 
 if(q.code){
-html+=`<div class="codeBlock">${q.code}</div>`
+html += `<div class="codeBlock">${q.code}</div>`
 }
 
-/* DROPDOWN QUESTIONS */
+/* MULTI DROPDOWN / TRUE FALSE */
 
 if(q.subquestions){
 
 q.subquestions.forEach((sq,i)=>{
 
-html+=`
+html += `
 <p>${sq.text}</p>
 
 <select id="dropdown${i}">
@@ -69,7 +73,7 @@ if(q.type==="mcq"){
 
 q.choices.forEach((choice,i)=>{
 
-html+=`
+html += `
 <label class="choice">
 <input type="radio" name="answer" value="${i}">
 ${choice}
@@ -86,7 +90,7 @@ if(q.type==="multi-select"){
 
 q.choices.forEach((choice,i)=>{
 
-html+=`
+html += `
 <label class="choice">
 <input type="checkbox" name="answer" value="${i}">
 ${choice}
@@ -97,7 +101,41 @@ ${choice}
 
 }
 
-container.innerHTML=html
+/* MATCHING */
+
+if(q.type==="matching"){
+
+q.pairs.forEach((p,i)=>{
+
+html += `
+<p>${p.left}</p>
+
+<select id="match${i}">
+<option value="">Select answer</option>
+${q.pairs.map(x=>`<option value="${x.right}">${x.right}</option>`).join("")}
+</select>
+`
+
+})
+
+}
+
+/* DOCSTRING */
+
+if(q.type==="docstring"){
+
+q.answers.forEach((a,i)=>{
+
+html += `
+<p>Answer ${i+1}</p>
+<input type="text" id="doc${i}">
+`
+
+})
+
+}
+
+container.innerHTML = html
 
 updateProgress()
 highlightCurrent()
@@ -108,11 +146,11 @@ highlightCurrent()
 
 function checkAnswer(){
 
-let q=questions[currentQuestion]
+let q = questions[currentQuestion]
 
-let buttons=document.querySelectorAll("#questionNav button")
+let navButtons = document.querySelectorAll("#questionNav button")
 
-let correct=true
+let correct = true
 
 /* DROPDOWN */
 
@@ -120,16 +158,20 @@ if(q.subquestions){
 
 q.subquestions.forEach((sq,i)=>{
 
-let select=document.getElementById(`dropdown${i}`)
+let select = document.getElementById(`dropdown${i}`)
 
-if(select.value===sq.answer){
+if(select){
+
+if(select.value === sq.answer){
 
 select.style.border="2px solid green"
 
 }else{
 
 select.style.border="2px solid red"
-correct=false
+correct = false
+
+}
 
 }
 
@@ -173,7 +215,7 @@ if(q.answers.includes(i)){
 c.classList.add("correct")
 }
 
-if(selected.includes(i)&&!q.answers.includes(i)){
+if(selected.includes(i) && !q.answers.includes(i)){
 c.classList.add("wrong")
 correct=false
 }
@@ -182,14 +224,52 @@ correct=false
 
 }
 
-/* COLOR NAVIGATION */
+/* MATCHING */
+
+if(q.type==="matching"){
+
+q.pairs.forEach((p,i)=>{
+
+let select=document.getElementById(`match${i}`)
+
+if(select.value===p.right){
+select.style.border="2px solid green"
+}else{
+select.style.border="2px solid red"
+correct=false
+}
+
+})
+
+}
+
+/* DOCSTRING */
+
+if(q.type==="docstring"){
+
+q.answers.forEach((a,i)=>{
+
+let input=document.getElementById(`doc${i}`)
+
+if(input.value.trim()===a){
+input.style.border="2px solid green"
+}else{
+input.style.border="2px solid red"
+correct=false
+}
+
+})
+
+}
+
+/* NAV COLOR */
 
 if(correct){
-buttons[currentQuestion].style.background="green"
-buttons[currentQuestion].style.color="white"
+navButtons[currentQuestion].style.background="green"
+navButtons[currentQuestion].style.color="white"
 }else{
-buttons[currentQuestion].style.background="red"
-buttons[currentQuestion].style.color="white"
+navButtons[currentQuestion].style.background="red"
+navButtons[currentQuestion].style.color="white"
 }
 
 }
@@ -226,7 +306,7 @@ document.getElementById("progressBar").style.width=percent+"%"
 
 }
 
-/* CURRENT HIGHLIGHT */
+/* HIGHLIGHT CURRENT */
 
 function highlightCurrent(){
 
